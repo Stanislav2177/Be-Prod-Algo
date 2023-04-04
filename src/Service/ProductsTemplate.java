@@ -11,7 +11,7 @@ public class ProductsTemplate {
         Product product = new Product();
         product.setName("A");
         product.setUnitCost(0.52);
-        product.setMarkup(80);
+        product.setMarkup("80");
         product.setPromotion("none");
 
         return product;
@@ -21,7 +21,7 @@ public class ProductsTemplate {
         Product product = new Product();
         product.setName("B");
         product.setUnitCost(0.38);
-        product.setMarkup(120);
+        product.setMarkup("120");
         product.setPromotion("30");
 
         return product;
@@ -32,7 +32,7 @@ public class ProductsTemplate {
 
         product.setName("C");
         product.setUnitCost(0.52);
-        product.setMarkup(80);
+        product.setMarkup("80");
         product.setPromotion("none");
 
         return product;

@@ -1,18 +1,22 @@
 package Service;
 
+import java.util.StringTokenizer;
+
 public class ProductPriceCalculator {
     private Product product;
     private Client client;
 
 
-//    public double getFinalPrice(Product product, Client client){
-//        //main method which combines all sub-methods to calculate final price
-//
-//
-//
-//    }
+    public double getFinalPrice(Product product, Client client){
+        //main method which combines all sub-methods to calculate final price
+
+        //get the total price only with markup
+//        double price = chooseCorrectMarkup(product);
 
 
+
+        return 0;
+    }
 
 
     public double getProductWithoutMarkup(Product product){
@@ -21,11 +25,18 @@ public class ProductPriceCalculator {
 
     public double getProductWithMarkup(Product product){
         double priceWithoutMarkup = getProductWithoutMarkup(product);
-        return priceWithoutMarkup + priceWithoutMarkup*product.getMarkup()/100;
+
+        double markup = checkMarkup(product);
+
+
+        return priceWithoutMarkup + priceWithoutMarkup*markup/100;
+
     }
 
     public double getProductPriceWithFixedMarkup(Product product){
-        return product.getQuantity()*product.getMarkup();
+        double fixedMarkup = checkMarkup(product);
+
+        return product.getQuantity()*fixedMarkup;
     }
 
 
@@ -50,7 +61,7 @@ public class ProductPriceCalculator {
 
         if(priceWithMarkup >= 10000 && priceWithMarkup <= 30000){
             idDiscount = getDiscountAbove10000(client);
-        }else {
+        }else if(priceWithMarkup >= 30000) {
             idDiscount = getDiscountAbove30000(client);
         }
 
@@ -70,11 +81,11 @@ public class ProductPriceCalculator {
 
         //check the statement if the leftover amount is equal to buy amount
         //and if it's, then will be added free product
+        System.out.println("Left amount = " + leftAmount);
+
         if(leftAmount == buyAmount){
             freeAmount+=getForFree;
         }
-
-        System.out.println("Left amount = " + leftAmount);
 
         return freeAmount;
     }
@@ -109,5 +120,48 @@ public class ProductPriceCalculator {
             return discounts[index];
         }
         return 1; // default discount if client ID is out of range
+    }
+
+//    private double chooseCorrectMarkup(Product product) {
+//        String markupToCheck = checkMarkup(product);
+//
+//
+//        //quick statement to check if the last char in the markup is percent
+//        //for example, if the markup is 100%, instance of stringBuilder would be
+//        //made and the last char (%) will be removed, test made for this case,
+//        //test name: test2GetProductPriceWithFixedMarkup
+//        int markupLength = markupToCheck.length();
+//        String checkIfItsPercent = String.valueOf(markupToCheck.charAt(markupLength-1));
+//
+//        if(checkIfItsPercent.equals("%")){
+//            StringBuilder stringBuilder = new StringBuilder(markupToCheck);
+//            stringBuilder.delete(markupLength-1, markupLength);
+//            return Double.parseDouble(stringBuilder.toString());
+//        }
+//
+//
+//
+//
+//    }
+
+    private double checkMarkup(Product product){
+        String markup = product.getMarkup();
+        StringTokenizer stringTokenizer = new StringTokenizer(markup);
+
+        String s = stringTokenizer.nextToken();
+
+        //quick statement to check if the last char in the markup is percent
+        //for example, if the markup is 100%, instance of stringBuilder would be
+        //made and the last char (%) will be removed, test made for this case,
+        //test name: test2GetProductPriceWithFixedMarkup
+        int markupLength = s.length();
+        String checkIfItsPercent = String.valueOf(s.charAt(markupLength-1));
+
+        if(checkIfItsPercent.equals("%")){
+            StringBuilder stringBuilder = new StringBuilder(s);
+            stringBuilder.delete(markupLength-1, markupLength);
+            return Double.parseDouble(stringBuilder.toString());
+        }
+        return Double.parseDouble(s);
     }
 }

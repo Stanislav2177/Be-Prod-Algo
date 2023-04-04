@@ -4,7 +4,7 @@ public class Product {
     private String name;
     private double unitCost;
     private int quantity;
-    private double markup;
+    private String markup;
     private String promotion;
     private double discount;
 
@@ -12,7 +12,7 @@ public class Product {
 
     }
 
-    public Product(String name, double unitCost, int quantity, double markup, String promotion, double discount) {
+    public Product(String name, double unitCost, int quantity, String markup, String promotion, double discount) {
         this.name = name;
         this.unitCost = unitCost;
         this.quantity = quantity;
@@ -21,7 +21,15 @@ public class Product {
         this.discount = discount;
     }
 
-    public Product(String name, double unitCost, int quantity, double markup) {
+    public Product(String name, double unitCost, int quantity, String markup, String promotion) {
+        this.name = name;
+        this.unitCost = unitCost;
+        this.quantity = quantity;
+        this.markup = markup;
+        this.promotion = promotion;
+    }
+
+    public Product(String name, double unitCost, int quantity, String markup) {
         //Constructor for product which don't have promotion
         this.name = name;
         this.unitCost = unitCost;
@@ -54,11 +62,11 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public double getMarkup() {
+    public String getMarkup() {
         return markup;
     }
 
-    public void setMarkup(double markup) {
+    public void setMarkup(String markup) {
         this.markup = markup;
     }
 
