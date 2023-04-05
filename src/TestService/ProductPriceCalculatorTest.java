@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ProductPriceCalculatorTest {
 
+    //TODO: MAKE PRODUCT TO BE AVAILABLE OUTSIDE THE METHOD SCOPE
+
     @Test
     void testGetProductWithoutMarkup() {
         // Arrange
@@ -76,40 +78,90 @@ class ProductPriceCalculatorTest {
         assertEquals(32654, productFreeItems);
     }
 
-    @Test
-    void testGetAdditionalDiscountsAbove30000EUR(){
-        Product product = new Product("Product А", 0.50, 97957, "0.9 EUR/unit");
-        Client client = new Client(4);
 
+    @Test
+    void test1CheckMarkupType(){
+        Product product = new Product("Product А", 0.05, 97957, "56765%");
         ProductPriceCalculator calculator = new ProductPriceCalculator();
 
-        double totalDiscount = calculator.getAdditionalDiscounts(product, client);
+        String type = calculator.markupType(product);
 
-        assertEquals(7, totalDiscount);
+        assertEquals("percent", type);
     }
 
     @Test
-    void testGetAdditionalDiscountsAbove10000EUR(){
-        Product product = new Product("Product А", 0.13, 97957, "0.9 EUR/unit");
-        Client client = new Client(2);
-
+    void test2CheckMarkupType(){
+        Product product = new Product("Product А", 0.05, 97957, "541.24 EUR/unit");
         ProductPriceCalculator calculator = new ProductPriceCalculator();
 
-        double totalDiscount = calculator.getAdditionalDiscounts(product, client);
+        String type = calculator.markupType(product);
 
-        assertEquals(5, totalDiscount);
+        assertEquals("fixed", type);
     }
 
     @Test
-    void testGetAdditionalDiscountsBelow10000EUR(){
-        Product product = new Product("Product А", 0.05, 97957, "0.9 EUR/unit");
-        Client client = new Client(2);
+    void testGetFinalPrice(){
+        Product product = new Product("Product А", 2.50, 10000, "100%", "Buy 2, get 1 for free");
+        ProductPriceCalculator calculator = new ProductPriceCalculator();
+
+        Client client = new Client(1);
+
+        //TODO:MAIN METHOD, THIS TEST IS ONLY FOR LOCAL TEST, NOT FINAL ONE
+
+        double finalPrice = calculator.getFinalPrice(product, client);
+
+        assertEquals(46550.0, finalPrice);
+    }
+
+    @Test
+    void testGetPromotionType(){
+        Product product = new Product("Product А", 0.50, 10000, "100%", "none");
+        ProductPriceCalculator calculator = new ProductPriceCalculator();
+
+        String promotionType = calculator.promotionType(product);
+
+        assertEquals("none", promotionType);
+
+        product.setPromotion("30% off");
+
+        promotionType = calculator.promotionType(product);
+
+        assertEquals("percent", promotionType);
+
+        product.setPromotion("Buy 5, get 11 for free");
+
+        promotionType = calculator.promotionType(product);
+
+        assertEquals("BuyXGetY", promotionType);
+    }
+
+    @Test
+    void testToCheckCorrectness(){
+        Product productA = new Product("A", 0.52, 10000, "80%", "none");
+        Product productC = new Product("C", 0.41, 20000, "0.9 EUR/unit", "none");
+
+        Client client = new Client(5);
 
         ProductPriceCalculator calculator = new ProductPriceCalculator();
 
-        double totalDiscount = calculator.getAdditionalDiscounts(product, client);
+        double priceA = calculator.getFinalPrice(productA, client);
+        double priceB = calculator.getFinalPrice(productC, client);
 
-        assertEquals(4, totalDiscount);
+        double total = priceA + priceB;
+
+        System.out.println("before basic = " + total);
+
+        double clientDiscount = calculator.basicClientDiscount(client);
+        total = calculator.applyBasicClientDiscount(total, clientDiscount);
+
+        System.out.println("after basic = " + total);
+
+        clientDiscount = calculator.additionalVolumeDiscount(client, total);
+        total = calculator.applyAdditionalVolumeDiscount(total, clientDiscount);
+
+        System.out.println("after additional " + total);
+
+        assertEquals(33070.80, total);
     }
 
 

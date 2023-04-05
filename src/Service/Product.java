@@ -6,20 +6,11 @@ public class Product {
     private int quantity;
     private String markup;
     private String promotion;
-    private double discount;
 
     public Product(){
 
     }
 
-    public Product(String name, double unitCost, int quantity, String markup, String promotion, double discount) {
-        this.name = name;
-        this.unitCost = unitCost;
-        this.quantity = quantity;
-        this.markup = markup;
-        this.promotion = promotion;
-        this.discount = discount;
-    }
 
     public Product(String name, double unitCost, int quantity, String markup, String promotion) {
         this.name = name;
@@ -78,11 +69,4 @@ public class Product {
         this.promotion = promotion;
     }
 
-    public double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(double discount) {
-        this.discount = discount;
-    }
 }
